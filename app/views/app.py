@@ -32,6 +32,10 @@ def index(request):
                     else settings.LOGIN_URL)
 
 @login_required
+def upload(request):
+   return render(request, 'app/upload.html') 
+
+@login_required
 def dashboard(request):
     no_processingnodes = ProcessingNode.objects.count() == 0
     if no_processingnodes and settings.PROCESSING_NODES_ONBOARDING is not None:
@@ -92,7 +96,8 @@ def model_display(request, project_pk=None, task_pk=None):
             title = task.name or task.id
         else:
             raise Http404()
-
+    
+    print(json.dumps(task.get_model_display_params()))
     return render(request, 'app/3d_model_display.html', {
             'title': title,
             'params': {

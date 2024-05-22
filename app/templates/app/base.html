@@ -83,9 +83,8 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="wrapper">
-        {{ SETTINGS.theme.html_before_header|safe }}
-
-        <nav id="navbar-top" class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        
+         <nav id="navbar-top" class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -95,14 +94,7 @@
                 </button>
                 {% block navbar-top-links %}{% endblock %}
             
-                {% if '/public/task/' in request.path and request.user.is_anonymous and SETTINGS.organization_website %}
-                    <a class="navbar-brand" href="{{ SETTINGS.organization_website }}"><img src="{% settings_image_url 'app_logo_36' %}" alt="{{ SETTINGS.app_name }}" /></a>
-                    <a class="navbar-link" href="{{ SETTINGS.organization_website }}"><p class="navbar-text">{{ SETTINGS.app_name }}</p></a>
-                {% else %}
-                    <a class="navbar-brand" href="/"><img src="{% settings_image_url 'app_logo_36' %}" alt="{{ SETTINGS.app_name }}" /></a>
-                    <a class="navbar-link" href="/"><p class="navbar-text">{{ SETTINGS.app_name }}</p></a>
-                {% endif %}
-            </div>
+            </div> 
 
             {% block navbar-sidebar %}{% endblock %}
         </nav>

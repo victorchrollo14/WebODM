@@ -315,6 +315,7 @@ class TaskNestedView(APIView):
 
 def download_file_response(request, filePath, content_disposition, download_filename=None):
     filename = os.path.basename(filePath)
+    print(filename)
     if download_filename is None: 
         download_filename = filename
     filesize = os.stat(filePath).st_size
@@ -390,7 +391,7 @@ class TaskAssets(TaskNestedView):
         Downloads a task asset (if available)
         """
         task = self.get_and_check_task(request, pk)
-
+         
         # Check for directory traversal attacks
         try:
             asset_path = path_traversal_check(task.assets_path(unsafe_asset_path), task.assets_path(""))
@@ -400,6 +401,7 @@ class TaskAssets(TaskNestedView):
         if (not os.path.exists(asset_path)) or os.path.isdir(asset_path):
             raise exceptions.NotFound(_("Asset does not exist"))
 
+        print(asset_path)
         return download_file_response(request, asset_path, 'inline')
 
 """

@@ -6,7 +6,7 @@
 
     {% if not single_user %}
     <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
+           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
@@ -51,10 +51,17 @@
 {% endblock %}
 {% block navbar-sidebar %}
     <div class="navbar-default sidebar" role="navigation">
-        <div class="sidebar-nav navbar-collapse">
+              <div class="sidebar-nav navbar-collapse">
+                <div class="brand-logo">
+                   <a class="" href="https://visnetai.co/"><img src="/static/app/img/425e59.svg" width=100px height='auto' alt="{{ SETTINGS.app_name }}" /></a>
+                   
+                </div>
             <ul class="nav" id="side-menu">
                 <li>
                     <a href="/dashboard/"><i class="fa fa-tachometer-alt fa-fw"></i> {% trans 'Dashboard' %}</a>
+                </li>
+                <li> 
+                  <a href="/upload/">Upload Model</a>
                 </li>
                 {% load processingnode_extras plugins %}
                 {% can_view_processing_nodes as view_nodes %}
@@ -138,6 +145,11 @@
                     <a href="/about/"><i class="fa fa-info-circle fa-fw"></i> {% trans 'About' %}</a>
                 </li>
             </ul>
+            <div class="logout-btn-container"> 
+              <button class="logout-btn">
+                <a href="/logout/"><i class="fa fa-sign-out-alt fa-fw"></i> {% trans 'Logout' %}</a>
+              </button>
+            </div>
         </div>
         <!-- /.sidebar-collapse -->
     </div>
