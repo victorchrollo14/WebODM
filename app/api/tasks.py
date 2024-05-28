@@ -34,6 +34,7 @@ def flatten_files(request_files):
         [keys for keys in request_files])
      for file in filesList]
 
+
 class TaskIDsSerializer(serializers.BaseSerializer):
     def to_representation(self, obj):
         return obj.id
@@ -315,12 +316,10 @@ class TaskNestedView(APIView):
 
 def download_file_response(request, filePath, content_disposition, download_filename=None):
     filename = os.path.basename(filePath)
-    print(filename)
     if download_filename is None: 
         download_filename = filename
     filesize = os.stat(filePath).st_size
     file = open(filePath, "rb")
-
     # More than 100mb, normal http response, otherwise stream
     # Django docs say to avoid streaming when possible
     stream = filesize > 1e8 or request.GET.get('_force_stream', False)
@@ -401,7 +400,6 @@ class TaskAssets(TaskNestedView):
         if (not os.path.exists(asset_path)) or os.path.isdir(asset_path):
             raise exceptions.NotFound(_("Asset does not exist"))
 
-        print(asset_path)
         return download_file_response(request, asset_path, 'inline')
 
 """

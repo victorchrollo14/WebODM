@@ -56,36 +56,38 @@
                    <a class="" href="https://visnetai.co/"><img src="/static/app/img/425e59.svg" width=100px height='auto' alt="{{ SETTINGS.app_name }}" /></a>
                    
                 </div>
-            <ul class="nav" id="side-menu">
+             <ul class="nav" id="side-menu">
                 <li>
                     <a href="/dashboard/"><i class="fa fa-tachometer-alt fa-fw"></i> {% trans 'Dashboard' %}</a>
                 </li>
-                <li> 
-                  <a href="/upload/">Upload Model</a>
+                <li>
+                  <a href="/uploads/">
+                    <img src='/static/app/img/upload-icon.svg' width='20px' height='20px' style="margin-right:1.5px"/>
+                    Upload Model</a>
                 </li>
-                {% load processingnode_extras plugins %}
+                <!-- {% load processingnode_extras plugins %} -->
                 {% can_view_processing_nodes as view_nodes %}
                 {% can_add_processing_nodes as add_nodes %}
                 {% get_visible_processing_nodes as nodes %}
 
                 {% get_plugins_main_menus as plugin_menus %}
                 {% for menu in plugin_menus %}
-                    <li>
-                        <a href="{{menu.link}}"><i class="{{menu.css_icon}}"></i> {{menu.label}}{% if menu.has_submenu %}<span class="fa arrow"></span>{% endif %}</a>
+                    <!-- <li> -->
+                        <!-- <a href="{{menu.link}}"><i class="{{menu.css_icon}}"></i> {{menu.label}}{% if menu.has_submenu %}<span class="fa arrow"></span>{% endif %}</a> -->
 
                         {% if menu.has_submenu %}
-                            <ul class="nav nav-second-level">
+                            <!-- <ul class="nav nav-second-level"> -->
                             {% for menu in menu.submenu %}
-                                <li>
-                                    <a href="{{menu.link}}"><i class="{{menu.css_icon}}"></i> {{menu.label}}{% if menu.has_submenu %}<span class="fa arrow"></span>{% endif %}</a>
-                                </li>
+                                <!-- <li> -->
+                                    <!-- <a href="{{menu.link}}"><i class="{{menu.css_icon}}"></i> {{menu.label}}{% if menu.has_submenu %}<span class="fa arrow"></span>{% endif %}</a> -->
+                                <!-- </li> -->
                             {% endfor %}
-                            </ul>
+                            <!-- </ul> -->
                         {% endif %}
-                    </li>
+                    <!-- </li> -->
                 {% endfor %}
 
-                {% if view_nodes %}
+                {% if not view_nodes %}
                 <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> {% trans 'Processing Nodes' %}<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -105,7 +107,7 @@
                 </li>
                 {% endif %}
 
-                {% if user.is_staff %}
+                {% if  user.is_staff %}
                 <li>
                     <a href="#"><i class="fa fa-cogs fa-fw"></i> {% trans 'Administration' %}<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -136,14 +138,15 @@
                 {% endif %}
 
                 {% is_dev_mode as dev_mode %}
-                {% if dev_mode and user.is_superuser %}
+                {% if not dev_mode and user.is_superuser %}
                 <li>
                     <a href="/dev-tools/"><i class="fa fa-bug fa-fw"></i> {% trans 'Developer Tools' %}</a>
                 </li>
                 {% endif %}
-                <li id="about-menu">
-                    <a href="/about/"><i class="fa fa-info-circle fa-fw"></i> {% trans 'About' %}</a>
-                </li>
+                <!-- <li id="about-menu"> -->
+                <!--     <a href="/about/"><i class="fa fa-info-circle fa-fw"></i> {% trans 'About' %}</a> -->
+                <!-- </li> -->
+
             </ul>
             <div class="logout-btn-container"> 
               <button class="logout-btn">

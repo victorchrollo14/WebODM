@@ -15,6 +15,7 @@ from .workers import CheckTask, GetTaskResult
 from .users import UsersList
 from .externalauth import ExternalTokenAuth
 from webodm import settings
+from .fileDownload import FileDownload
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
@@ -35,7 +36,8 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^', include(tasks_router.urls)),
     url(r'^', include(admin_router.urls)),
-
+    
+    url(r'3d_models/(?P<user_id>[^/.]+)/(?P<file_name>[^/.]+)$', FileDownload.as_view()),
     url(r'projects/(?P<project_pk>[^/.]+)/tasks/(?P<pk>[^/.]+)/(?P<tile_type>orthophoto|dsm|dtm)/tiles\.json$', TileJson.as_view()),
     url(r'projects/(?P<project_pk>[^/.]+)/tasks/(?P<pk>[^/.]+)/(?P<tile_type>orthophoto|dsm|dtm)/bounds$', Bounds.as_view()),
     url(r'projects/(?P<project_pk>[^/.]+)/tasks/(?P<pk>[^/.]+)/(?P<tile_type>orthophoto|dsm|dtm)/metadata$', Metadata.as_view()),

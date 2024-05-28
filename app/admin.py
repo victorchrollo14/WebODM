@@ -17,6 +17,7 @@ from app.models import PluginDatum
 from app.models import Preset
 from app.models import Plugin
 from app.models import Profile
+from app.models import ModelFiles 
 from app.plugins import get_plugin_by_name, enable_plugin, disable_plugin, delete_plugin, valid_plugin, \
     get_plugins_persistent_path, clear_plugins_cache, init_plugins
 from .models import Project, Task, Setting, Theme
@@ -26,15 +27,19 @@ from webodm import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.translation import gettext_lazy as _, gettext
 
-
 class ProjectAdmin(GuardedModelAdmin):
     list_display = ('id', 'name', 'owner', 'created_at', 'tasks_count', 'tags')
     list_filter = ('owner',)
     search_fields = ('id', 'name', 'owner__username')
 
+class ModelFilesAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'owner', 'file_name', 'file_url', 'page_url', 'created_at')
+    list_filter = ('id', 'name', 'owner', 'file_name','file_url', 'page_url', 'created_at')
+    search_fields = ('id', 'name', 'owner', 'file_name','file_url', 'page_url', 'created_at') 
+        
 
 admin.site.register(Project, ProjectAdmin)
-
+admin.site.register(ModelFiles, ModelFilesAdmin)
 
 class TaskAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):

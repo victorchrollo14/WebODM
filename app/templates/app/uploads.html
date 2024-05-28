@@ -1,0 +1,71 @@
+{% extends "app/logged_in_base.html" %} 
+
+
+{% block headers-before-bundle %}
+
+<link rel="stylesheet" type="text/css" href="/static/app/css/upload.css">
+<script type="module" href="/static/app/js/vendor/jquery-1.11.2.min.js" ></script>
+{% endblock %}
+
+{% block content %}
+<section class='upload-page' >
+  <div class="upload-model">
+    <h1>upload a 3d model</h1>
+    <form action="" class="form" width="500px" > 
+       <input type="text" class="form-control"  name="name" placeholder="enter model name" required />
+       <input type="file" name="file" value="upload" class="file-upload" style='margin:10px 0;' required />
+       <button type="submit" class="upload-btn">Upload</button>
+    </form>
+   </div>
+  <section class="uploaded-models-list" >
+    <h1>List of uploaded models</h1>
+    <div class="model-cards">
+    {% for model in models %}
+      <div class="list-card" >
+        <h3>{{model.name}}</h3>
+        <a class="view-model" href="{{model.page_url}}">View</a>
+      </div>
+    {% endfor %}
+    </div> 
+  </section> 
+</section>
+
+<script type="module">
+  const form = document.querySelector('.form');
+ 
+  form.addEventListener("submit", async (e) => {
+     e.preventDefault();
+     
+     const formData = new FormData(form);
+     const name = formData.get('name');
+     const file = formData.get('file');
+     
+     const options = {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify(formData)
+     };
+
+     // const response = await fetch('http://localhost:8000/uploads/', options);
+     $.ajax({
+          url: `/uploads/`,
+          type: 'POST',
+          data: formData,
+          dataType: 'json',
+          processData: false,
+          contentType: false,
+          success: function(response){
+             console.log("success", response)
+          },
+          error: (e) => {
+           console.log("error: ", e)
+          }
+      })      
+    
+
+  })
+
+</script>
+{% endblock %}

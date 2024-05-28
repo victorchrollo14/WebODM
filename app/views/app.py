@@ -1,19 +1,23 @@
 import json
+import os
 
 from django.contrib.auth import login
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from guardian.shortcuts import get_objects_for_user
 
 from nodeodm.models import ProcessingNode
-from app.models import Project, Task
+from app.models import Project, Task, ModelFiles
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django import forms
 from webodm import settings
+from app.utils import uploadImage  
+from dotenv import load_dotenv
+load_dotenv()
 
 def index(request):
     # Check first access
@@ -33,7 +37,47 @@ def index(request):
 
 @login_required
 def upload(request):
-   return render(request, 'app/upload.html') 
+      if(request.method == "GET"):
+        models = ModelFiles.objects.filter(owner=request.user.id).values('name', 'page_url', 'file_url')
+        for model in models:
+            print(model)
+
+        context = {
+            'models': models
+        }
+        return render(request, 'app/uploads.html', context) 
+     
+      if(request.method == "POST"): 
+        try:   
+           if(request.user.is_authenticated is False):
+             return Http404()
+        
+           name = request.POST.get('name', None)
+           file = request.FILES.get('file')
+           file_name = request.FILES.get('file').name
+           user_id = request.user.id
+         
+           file_url = uploadImage(request.FILES.get('file'))
+           page_url = f"{os.getenv('APP_URL')}/3d_models/{user_id}/{file_name}"
+           print(name, file_name, file_url, page_url)
+           
+           newFile = ModelFiles(owner=request.user, name=name, file_name=file_name, file_url=file_url, page_url=page_url)
+           newFile.save()
+           message = {
+             'message': f"saved {file_name}",
+           }
+           
+           return JsonResponse(message)
+        
+        except Exception as e:
+            return JsonResponse({'error': e}) 
+
+@login_required
+def model_view(request, user_id,file_name):
+    models = ModelFiles.objects.filter(owner=user_id, file_name=file_name).values("name","file_url")
+    name = models[0]['name']
+    file_url = models[0]['file_url']
+    return render(request, 'app/model_view.html', {'model_name':name, 'file_url': file_url})
 
 @login_required
 def dashboard(request):
@@ -85,7 +129,7 @@ def map(request, project_pk=None, task_pk=None):
 @login_required
 def model_display(request, project_pk=None, task_pk=None):
     title = _("3D Model Display")
-
+    print(project_pk, task_pk)
     if project_pk is not None:
         project = get_object_or_404(Project, pk=project_pk)
         if not request.user.has_perm('app.view_project', project):

@@ -785,3 +785,4 @@ THREE.OBJLoader = ( function () {
 	return OBJLoader;
 
 } )();
+export default THREE.OBJLoader 

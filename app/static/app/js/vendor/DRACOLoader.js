@@ -638,3 +638,4 @@ DRACOLoader.getDecoderModule = function () {
 };
 
 THREE.DRACOLoader = DRACOLoader;
+export default DRACOLoader;
